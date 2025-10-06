@@ -71,7 +71,7 @@ export default function EditDeliveryRegister() {
         try {
             await editar(entry.idregister, nome, fornecedor, telefone, placa, nNota, hrEntrada);
             Alert.alert('Sucesso', 'Registro editado com sucesso! Retornando para tela inicial.');
-            navigation.navigate('DeliveryRegisterScreen');
+            navigation.goBack();
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar a edição. Tente novamente.');
         }
@@ -93,7 +93,7 @@ export default function EditDeliveryRegister() {
             await deletar(entry.idregister);
             setVisibleModalDelete(false);
             Alert.alert('Sucesso', 'Registro deletado com sucesso! Retornando para tela inicial.');
-            navigation.navigate('DeliveryRegisterScreen');
+            navigation.goBack();
         } catch (err) {
             setVisibleModalDelete(false);
             Alert.alert('Erro', 'Não foi possível deletar o registro. Tente novamente.');
@@ -115,7 +115,7 @@ export default function EditDeliveryRegister() {
                         <View style={styles.painelLeft}>
                             <AnimatedInput label="Nome" iconName="account" value={nome} onChangeText={setNome} />
                             <AnimatedInput label="Placa do Veículo" iconName="car" value={placa} onChangeText={setPlaca} />
-                            <AnimatedInput label="Horário da Entrada" iconName="clock-time-four-outline" value={hrEntrada} onChangeText={setHrEntrada} />
+                            <AnimatedInput label="Horário da Entrada" iconName="clock-time-four-outline" value={hrEntrada} onChangeText={setHrEntrada} editable={false} />
                             <AnimatedInput label="Fornecedor" iconName="store" value={fornecedor} onChangeText={setFornecedor} />
                             <AnimatedInput label="Telefone" iconName="phone" value={telefone} onChangeText={setTelefone} />
                             <AnimatedInput label="Nº da nota" iconName="file-document-outline" value={nNota} onChangeText={setNNota} />
