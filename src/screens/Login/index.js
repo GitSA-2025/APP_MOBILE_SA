@@ -41,7 +41,7 @@ export default function Login() {
         try {
             await login(email, senha);
             Alert.alert('Seja bem vindo!', 'Login realizado com sucesso!');
-            navigation.navigate('Home');
+            navigation.navigate('Home', { user_email: email });
         } catch (err) {
             const msg = err.response?.data
             if (msg?.error === "Credenciais inválidas") {
