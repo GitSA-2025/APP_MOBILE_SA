@@ -73,7 +73,7 @@ export default function EditEntryRegister() {
         try {
             await editar(entry.idregister, nome, tipoPessoa, cpf, placa);
             Alert.alert('Sucesso', 'Registro editado com sucesso! Retornando para tela inicial.');
-            navigation.navigate('Home');
+            navigation.goBack();
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar a edição. Tente novamente.');
         }
@@ -95,7 +95,7 @@ export default function EditEntryRegister() {
             await marcarSaida(entry.idregister);
             setVisibleModal(false);
             Alert.alert('Sucesso', 'Saída marcada com sucesso! Retornando para tela inicial.');
-            navigation.navigate('Home');
+            navigation.goBack();
         } catch (err) {
             setVisibleModal(false);
             Alert.alert('Erro', 'Não foi possível realizar o registro de saída. Tente novamente.');
@@ -118,7 +118,7 @@ export default function EditEntryRegister() {
             await deletar(entry.idregister);
             setVisibleModalDelete(false);
             Alert.alert('Sucesso', 'Registro deletado com sucesso! Retornando para tela inicial.');
-            navigation.navigate('Home');
+            navigation.goBack();
         } catch (err) {
             setVisibleModalDelete(false);
             Alert.alert('Erro', 'Não foi possível deletar o registro. Tente novamente.');
@@ -131,7 +131,7 @@ export default function EditEntryRegister() {
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                 <View style={styles.painel}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
                             <Ionicons name="chevron-back-outline" size={24} color="black" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrada</Text>
