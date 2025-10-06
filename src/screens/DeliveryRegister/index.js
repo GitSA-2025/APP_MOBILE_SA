@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AnimatedInput from '../../components/AnimatedInput';
 import { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../api/api';
 
 export default function DeliveryRegister() {
@@ -16,6 +16,8 @@ export default function DeliveryRegister() {
     const [nNota, setNNota] = useState('');
 
     const navigation = useNavigation();
+    const route = useRoute();
+    const { user_email } = route.params;
 
     function getDataHoraAtual() {
         const now = new Date();
@@ -33,13 +35,14 @@ export default function DeliveryRegister() {
         setHrEntrada(horaFormatada);
     }, []);
 
-    async function registrar(nome, fornecedor, telefone, placa, nNota) {
+    async function registrar(nome, fornecedor, telefone, placa, nNota, user_email) {
         const dados = {
             nome,
             telefone,
             placa,
             industria: fornecedor,
             n_fiscal: nNota,
+            user_email
         };
 
         try {
@@ -59,9 +62,9 @@ export default function DeliveryRegister() {
         }
 
         try {
-            await registrar(nome, fornecedor, telefone, placa, nNota);
+            await registrar(nome, fornecedor, telefone, placa, nNota, user_email);
             Alert.alert('Sucesso', 'Registro salvo com sucesso! Retornando para tela inicial.');
-            navigation.navigate('Home');
+            navigation.goBack();
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar o registro. Tente novamente.');
         }
@@ -76,7 +79,7 @@ export default function DeliveryRegister() {
                 <View style={styles.painel}>
 
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('DeliveryRegisterScreen'); }}>
+                        <TouchableOpacity onPress={() => { navigation.goBack; }}>
                             <Ionicons name="chevron-back-outline" size={24} color="black" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrega</Text>
@@ -103,6 +106,7 @@ export default function DeliveryRegister() {
                                 iconName="clock-time-four-outline"
                                 value={hrEntrada}
                                 onChangeText={setHrEntrada}
+                                editable={false}
                             />
                             <AnimatedInput
                                 label="Fornecedor"
