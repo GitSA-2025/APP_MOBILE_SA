@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import AnimatedInput from '../../components/AnimatedInput';
 import { useState, useEffect } from 'react';
 import api from '../../api/api';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function EntryRegister() {
     const [nome, setNome] = useState('');
@@ -15,6 +15,8 @@ export default function EntryRegister() {
     const [placa, setPlaca] = useState('');
 
     const navigation = useNavigation();
+    const route = useRoute();
+    const { user_email } = route.params;
 
     function getDataHoraAtual() {
         const now = new Date();
@@ -39,8 +41,8 @@ export default function EntryRegister() {
         setHrEntrada(horaFormatada);
     }, []);
 
-    async function registrar(nome, tipo, cpf, placa) {
-        const dados = { nome, tipo, cpf, placa };
+    async function registrar(nome, tipo, cpf, placa, user_email) {
+        const dados = { nome, tipo, cpf, placa, user_email };
 
         try {
             const res = await api.post('/api/mobile/app/criarRegistroEntrada', dados);
@@ -58,9 +60,9 @@ export default function EntryRegister() {
         }
 
         try {
-            await registrar(nome, tipoPessoa, cpf, placa);
+            await registrar(nome, tipoPessoa, cpf, placa, user_email);
             Alert.alert('Sucesso', 'Registro salvo com sucesso! Retornando para tela inicial.');
-            navigation.navigate('Home');
+            navigation.navigate('Home', { user_email: user_email });
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar o registro. Tente novamente.');
         }
@@ -75,7 +77,7 @@ export default function EntryRegister() {
                 <View style={styles.painel}>
 
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => {navigation.navigate('Home');}}>
+                        <TouchableOpacity onPress={() => { navigation.goBack; }}>
                             <Ionicons name="chevron-back-outline" size={24} color="black" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrada</Text>
