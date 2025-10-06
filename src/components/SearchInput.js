@@ -66,7 +66,7 @@ const SearchInput = () => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15,
+        padding: 10,
         position: 'relative',
     },
     searchBox: {
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 2,
+        width: 200,
     },
     searchInput: {
         marginLeft: 6,
