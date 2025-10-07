@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import styles from './styles';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -53,7 +53,13 @@ export default function Register() {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+        style={{ flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <ScrollView
+            contentContainerStyle={{ flexGrow: 1}}
+            keyboardShouldPersistTaps="handled">
+                <View style={styles.container}>
             <View style={styles.leftPainel}>
                 <Image source={require('../../../assets/kozzy_logo_1.png')} style={{width: '50%', height: 80}}/>
                 <Text style={styles.title}>Olá, seja bem-vindo(a) novo usuário!</Text>
@@ -113,5 +119,7 @@ export default function Register() {
                 </View>
             </ScrollView>
         </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }

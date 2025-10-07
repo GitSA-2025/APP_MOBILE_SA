@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
 import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -79,7 +79,7 @@ export default function DeliveryRegister() {
                 <View style={styles.painel}>
 
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.goBack; }}>
+                        <TouchableOpacity onPress={() => { navigation.goBack(); }}>
                             <Ionicons name="chevron-back-outline" size={24} color="black" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrega</Text>

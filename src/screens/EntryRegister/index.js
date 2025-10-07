@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-na
 import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AnimatedInput from '../../components/AnimatedInput';
+import AnimatedSelect from '../../components/AnimatedSelect';
 import { useState, useEffect } from 'react';
 import api from '../../api/api';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -93,11 +94,12 @@ export default function EntryRegister() {
                                 value={nome}
                                 onChangeText={setNome}
                             />
-                            <AnimatedInput
+                            <AnimatedSelect
                                 label="Selecione o tipo de pessoa"
                                 iconName="account-group"
+                                options={['visitante', 'colaborador']}
                                 value={tipoPessoa}
-                                onChangeText={setTipoPessoa}
+                                onSelect={setTipoPessoa}
                             />
                             <AnimatedInput
                                 label="CPF"

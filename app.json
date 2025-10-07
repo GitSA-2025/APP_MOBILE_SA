@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "APP_MOBILE_SA",
+    "name": "SA",
     "slug": "APP_MOBILE_SA",
     "version": "1.0.0",
     "orientation": "landscape",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon_sa.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icon_sa.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#27445B"
     },
     "ios": {
       "supportsTablet": true
@@ -18,15 +18,21 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#27445B"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.sa_sistemadeacesso.APP_MOBILE_SA"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "96947c78-f9e0-446f-b6e3-c74756b8b3f7"
+      }
+    }
   }
 }

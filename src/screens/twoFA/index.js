@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import styles from './styles';
 import AnimatedInput from '../../components/AnimatedInput';
 import { useState } from 'react';
@@ -44,7 +44,13 @@ export default function TwoFA() {
         };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+    style={{ flex:1 }}
+    behavior={Platform.OS === 'ios' ? 'padding'  : 'height'}>
+      <ScrollView
+      contentContainerStyle={{ flexGrow: 1}}
+      keyboardShouldPersistTaps="handled">
+        <View style={styles.container}>
       <View style={styles.leftPainel}>
         <Text style={styles.title}>Continue o seu cadastro!</Text>
         <Text style={styles.subTitle}>
@@ -69,5 +75,7 @@ export default function TwoFA() {
 
         </View>
     </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

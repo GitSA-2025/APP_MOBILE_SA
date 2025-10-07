@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AnimatedInput from '../../components/AnimatedInput';
+import AnimatedSelect from '../../components/AnimatedSelect';
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../api/api';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
@@ -26,29 +27,29 @@ export default function EditEntryRegister() {
             let isActive = true;
 
             const fetchDados = async () => {
-            try {
-                const res = await api.get(`/api/mobile/app/exibirEntradas/${entry.idregister}`);
-                const data = res.data;
+                try {
+                    const res = await api.get(`/api/mobile/app/exibirEntradas/${entry.idregister}`);
+                    const data = res.data;
 
-                setDados(data);
-                setNome(data.nome || '');
-                setTipoPessoa(data.tipo || '');
-                setCpf(data.cpf || '');
-                setData(data.data || '');
-                setPlaca(data.placa || '');
-                setHrEntrada(data.hrentrada || '');
+                    setDados(data);
+                    setNome(data.nome || '');
+                    setTipoPessoa(data.tipo || '');
+                    setCpf(data.cpf || '');
+                    setData(data.data || '');
+                    setPlaca(data.placa || '');
+                    setHrEntrada(data.hrentrada || '');
 
-                console.log("Dados carregados:", data);
-            } catch (err) {
-                console.error('Erro ao carregar entradas:', err.response?.data || err.message);
-            }
-        };
+                    console.log("Dados carregados:", data);
+                } catch (err) {
+                    console.error('Erro ao carregar entradas:', err.response?.data || err.message);
+                }
+            };
 
-        fetchDados();
+            fetchDados();
 
-        return () => {
-            isActive = false;
-        };
+            return () => {
+                isActive = false;
+            };
 
         }, [entry.idregister])
     );
@@ -139,12 +140,40 @@ export default function EditEntryRegister() {
 
                     <View style={styles.fullPainel}>
                         <View style={styles.painelLeft}>
-                            <AnimatedInput label="Nome" iconName="account" value={nome} onChangeText={setNome} />
-                            <AnimatedInput label="Selecione o tipo de pessoa" iconName="account-group" value={tipoPessoa} onChangeText={setTipoPessoa} />
-                            <AnimatedInput label="CPF" iconName="badge-account-horizontal" value={cpf} onChangeText={setCpf} />
-                            <AnimatedInput label="Data" iconName="calendar" value={data} onChangeText={setData} editable={false} />
-                            <AnimatedInput label="Horário da Entrada" iconName="clock-time-four-outline" value={hrEntrada} onChangeText={setHrEntrada} editable={false} />
-                            <AnimatedInput label="Placa do Veículo" iconName="car" value={placa} onChangeText={setPlaca} />
+                            <AnimatedInput 
+                            label="Nome" 
+                            iconName="account" 
+                            value={nome} 
+                            onChangeText={setNome} />
+                            <AnimatedSelect
+                                label="Selecione o tipo de pessoa"
+                                iconName="account-group"
+                                options={['visitante', 'colaborador']}
+                                value={tipoPessoa}
+                                onSelect={setTipoPessoa}
+                            />
+                            <AnimatedInput 
+                            label="CPF" 
+                            iconName="badge-account-horizontal" 
+                            value={cpf} 
+                            onChangeText={setCpf} />
+                            <AnimatedInput 
+                            label="Data" 
+                            iconName="calendar" 
+                            value={data} 
+                            onChangeText={setData} 
+                            editable={false} />
+                            <AnimatedInput 
+                            label="Horário da Entrada" 
+                            iconName="clock-time-four-outline" 
+                            value={hrEntrada} 
+                            onChangeText={setHrEntrada} 
+                            editable={false} />
+                            <AnimatedInput 
+                            label="Placa do Veículo" 
+                            iconName="car" 
+                            value={placa} 
+                            onChangeText={setPlaca} />
                         </View>
 
                         <View style={styles.painelRight}>
