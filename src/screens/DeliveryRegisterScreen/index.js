@@ -57,9 +57,21 @@ export default function DeliveryRegisterScreen() {
         navigation.navigate('DeliveryRegister', { user_email: user_email });
     };
 
+    const handleFilterChange = async (filtro) => {
+        try {
+            const res = await api.post('/api/mobile/app/filtrarEntregas', {
+                user_email,
+                filtro,
+            });
+            setEntregas(res.data);
+        } catch (err) {
+            console.error('Erro ao aplicar filtro:', err.response?.data || err.message);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar style='light'/>
+            <StatusBar style='light' />
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <View style={{ flex: 1, marginLeft: sidebarOpen ? 230 : 0 }}>
                 <Header onMenuPress={() => setSidebarOpen(!sidebarOpen)} />
@@ -74,6 +86,7 @@ export default function DeliveryRegisterScreen() {
                     </View>
 
                     <View style={styles.tableContainer}>
+                        <SearchInput onFilterChange={handleFilterChange} />
                         <View style={styles.tableHeaderRow}>
                             <Text style={[styles.tableHeaderCell, styles.cellDate]}>Data</Text>
                             <Text style={[styles.tableHeaderCell, styles.cellName]}>Nome</Text>

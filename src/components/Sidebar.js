@@ -24,6 +24,10 @@ const Sidebar = ({ isOpen, onClose }) => {
         navigation.navigate('DeliveryRegisterScreen', { user_email });
     };
 
+    const handleReports = () => {
+        navigation.navigate('Reports', { user_email });
+    };
+
     const handleQrCodeApproval = () => {
         navigation.navigate('QrCodeApproval');
     };
@@ -63,7 +67,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <Text style={styles.menuItemText}>Fila de entregas</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} onPress={handleReports}>
                         <MaterialCommunityIcons name="file-document-outline" size={24} color="white" />
                         <Text style={styles.menuItemText}>Relatórios</Text>
                     </TouchableOpacity>

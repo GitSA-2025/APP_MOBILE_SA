@@ -15,6 +15,7 @@ import api from '../../api/api';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 import { StatusBar } from 'expo-status-bar';
+import SearchInput from '../../components/SearchInput';
 
 
 export default function Home() {
@@ -51,6 +52,18 @@ export default function Home() {
     }, [user_email])
   );
 
+  const handleFilterChange = async (filtro) => {
+          try {
+              const res = await api.post('/api/mobile/app/filtrarEntradas', {
+                  user_email,
+                  filtro,
+              });
+              setEntradas(res.data);
+          } catch (err) {
+              console.error('Erro ao aplicar filtro:', err.response?.data || err.message);
+          }
+      };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style='light'/>
@@ -74,6 +87,7 @@ export default function Home() {
           </View>
 
           <View style={styles.tableContainer}>
+            <SearchInput onFilterChange={handleFilterChange} />
             {/* Cabeçalho */}
             <View style={styles.tableHeaderRow}>
               <Text style={[styles.tableHeaderCell, styles.cellDate]}>Data</Text>

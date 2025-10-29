@@ -17,6 +17,7 @@ import DeliveryRegister from './src/screens/DeliveryRegister';
 import TwoFA from './src/screens/twoFA';
 import EditEntryRegister from './src/screens/EditEntryRegister';
 import EditDeliveryRegister from './src/screens/EditDeliveryRegister';
+import Reports from './src/screens/Reports';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -57,6 +58,7 @@ function App() {
         <Stack.Screen name="TwoFA" component={TwoFA} options={{ headerShown: false }} />
         <Stack.Screen name="EditEntryRegister" component={EditEntryRegister} options={{ headerShown: false }} />
         <Stack.Screen name="EditDeliveryRegister" component={EditDeliveryRegister} options={{ headerShown: false}}/>
+        <Stack.Screen name="Reports" component={Reports} options={{ headerShown: false}}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

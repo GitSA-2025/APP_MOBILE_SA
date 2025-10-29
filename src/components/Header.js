@@ -18,8 +18,6 @@ const Header = ({
 
       <Text style={styles.headerTitle}>{title}</Text>
 
-      {showSearch && <SearchInput />}
-
       {showLogo && (
         <View style={styles.logoContainer}>
           <Image

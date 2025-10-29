@@ -105,7 +105,7 @@ export default function EditDeliveryRegister() {
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                 <View style={styles.painel}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
                             <Ionicons name="chevron-back-outline" size={24} color="black" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrada</Text>
