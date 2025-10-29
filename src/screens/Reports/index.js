@@ -88,9 +88,9 @@ export default function Repost() {
                 <View style={styles.header}>
                     <Text style={styles.textHeader}> Relatórios | </Text>
                     <Text style={styles.textHeader}> Data inicio </Text>
-                    <TextInput style={styles.textInput} placeholder="AAAA-MM-DD" value={dataInicio} onChangeText={setDataInicio} />
+                    <TextInput style={styles.textInput} placeholder="dd-mm-aaaa" value={dataInicio} onChangeText={setDataInicio} />
                     <Text style={styles.textHeader}> Data final </Text>
-                    <TextInput style={styles.textInput} placeholder="AAAA-MM-DD" value={dataFim} onChangeText={setDataFim} />
+                    <TextInput style={styles.textInput} placeholder="dd-mm-aaaa" value={dataFim} onChangeText={setDataFim} />
                     <TouchableOpacity style={styles.btn} onPress={gerarGrafico}>
                         <Text style={styles.btnText}>Gerar gráfico</Text>
                     </TouchableOpacity>
