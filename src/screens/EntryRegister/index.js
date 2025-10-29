@@ -78,7 +78,7 @@ export default function EntryRegister() {
                 <View style={styles.painel}>
 
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.goBack; }}>
+                        <TouchableOpacity onPress={() => { navigation.goBack(); }}>
                             <Ionicons name="chevron-back-outline" size={24} color="black" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrada</Text>
@@ -106,6 +106,8 @@ export default function EntryRegister() {
                                 iconName="badge-account-horizontal"
                                 value={cpf}
                                 onChangeText={setCpf}
+                                keyboardType="numeric"
+                                placeholder="somente números"
                             />
                             <AnimatedInput
                                 label="Data"

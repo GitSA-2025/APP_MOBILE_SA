@@ -13,7 +13,7 @@ import Home from './src/screens/Home';
 import EntryRegister from './src/screens/EntryRegister';
 import DeliveryRegisterScreen from './src/screens/DeliveryRegisterScreen';
 import DeliveryRegister from './src/screens/DeliveryRegister';
-//import QrCodeApproval from './src/screens/QrCodeApproval';
+import QrCodeApproval from './src/screens/QrCodeApproval';
 import TwoFA from './src/screens/twoFA';
 import EditEntryRegister from './src/screens/EditEntryRegister';
 import EditDeliveryRegister from './src/screens/EditDeliveryRegister';
@@ -59,6 +59,7 @@ function App() {
         <Stack.Screen name="EditEntryRegister" component={EditEntryRegister} options={{ headerShown: false }} />
         <Stack.Screen name="EditDeliveryRegister" component={EditDeliveryRegister} options={{ headerShown: false}}/>
         <Stack.Screen name="Reports" component={Reports} options={{ headerShown: false}}/>
+        <Stack.Screen name="QrCodeApproval" component={QrCodeApproval} options={{ headerShown: false}}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

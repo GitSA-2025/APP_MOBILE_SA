@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     };
 
     const handleQrCodeApproval = () => {
-        navigation.navigate('QrCodeApproval');
+        navigation.navigate('QrCodeApproval', { user_email });
     };
 
     const handleLogout = () => {

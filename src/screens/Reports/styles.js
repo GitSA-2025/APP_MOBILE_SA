@@ -76,24 +76,25 @@ const styles = StyleSheet.create({
     },
 
     labelColabo: {
-        backgroundColor: '#2E7D32',
+        backgroundColor: 'rgba(46, 125, 50, 1)',
         padding: 10,
         borderRadius: 6,
         elevation: 5,
         marginBottom: 10,
     },
     labelEntr: {
-        backgroundColor: '#EF6C00',
+        backgroundColor: 'rgba(239, 108, 0, 1)',
+        padding: 10,
+        borderRadius: 6,
+        elevation: 5,
+        
+    },
+    labelVisit: {
+        backgroundColor: 'rgba(249, 168, 37, 1)',
         padding: 10,
         borderRadius: 6,
         elevation: 5,
         marginBottom: 10,
-    },
-    labelVisit: {
-        backgroundColor: '#F9A825',
-        padding: 10,
-        borderRadius: 6,
-        elevation: 5
     },
 });
 

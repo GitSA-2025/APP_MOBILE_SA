@@ -119,12 +119,15 @@ export default function DeliveryRegister() {
                                 iconName="phone"
                                 value={telefone}
                                 onChangeText={setTelefone}
+                                keyboardType="phone-pad"
+                                placeholder='11999999999'
                             />
                             <AnimatedInput
                                 label="Nº da nota"
                                 iconName="file-document-outline"
                                 value={nNota}
                                 onChangeText={setNNota}
+                                keyboardType="numeric"
                             />
 
                         </View>

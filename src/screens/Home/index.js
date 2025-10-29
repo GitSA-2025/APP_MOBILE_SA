@@ -3,10 +3,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   SafeAreaView,
   ScrollView,
-  Image
 } from 'react-native';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { Feather, MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';

@@ -108,11 +108,11 @@ export default function Repost() {
                             <View style={styles.labelColabo}>
                                 <Text style={styles.labelText}>{valorColaboradores} Colaboradores</Text>
                             </View>
-                            <View style={styles.labelEntr}>
-                                <Text style={styles.labelText}>{valorEntregadores} Entregadores</Text>
-                            </View>
                             <View style={styles.labelVisit}>
                                 <Text style={styles.labelText}>{valorVisitantes} Visitantes</Text>
+                            </View>
+                            <View style={styles.labelEntr}>
+                                <Text style={styles.labelText}>{valorEntregadores} Entregadores</Text>
                             </View>
                         </View>
                         {/*Gráfico*/}
@@ -123,9 +123,9 @@ export default function Repost() {
                                     datasets: [{
                                         data: dados.map((d) => d.value),
                                         colors: [
-                                            (opacity = 1) => `rgba(32, 114, 38, ${opacity})`,
-                                            (opacity = 1) => `rgba(255, 140, 0, ${opacity})`,
-                                            (opacity = 1) => `rgba(255, 175, 50, ${opacity})`,
+                                            (opacity = 1) => `rgba(46, 125, 50, ${opacity})`,
+                                            (opacity = 1) => `rgba(249, 168, 37, ${opacity})`,
+                                            (opacity = 1) => `rgba(239, 108, 0, ${opacity})`,
                                         ]
                                     }],
                                 }}
