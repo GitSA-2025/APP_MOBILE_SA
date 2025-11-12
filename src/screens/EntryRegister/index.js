@@ -6,6 +6,7 @@ import AnimatedSelect from '../../components/AnimatedSelect';
 import { useState, useEffect } from 'react';
 import api from '../../api/api';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 export default function EntryRegister() {
     const [nome, setNome] = useState('');
@@ -14,6 +15,7 @@ export default function EntryRegister() {
     const [data, setData] = useState('');
     const [hrEntrada, setHrEntrada] = useState('');
     const [placa, setPlaca] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -59,13 +61,18 @@ export default function EntryRegister() {
             Alert.alert('Atenção', 'Preencha todos os campos obrigatórios!');
             return;
         }
-
+        if (loading) return;
+        setLoading(true);
         try {
+            
             await registrar(nome, tipoPessoa, cpf, placa, user_email);
             Alert.alert('Sucesso', 'Registro salvo com sucesso! Retornando para tela inicial.');
             navigation.navigate('Home', { user_email: user_email });
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar o registro. Tente novamente.');
+        }
+        finally{
+            setLoading(false);
         }
     };
 
@@ -144,6 +151,7 @@ export default function EntryRegister() {
                     </View>
                 </View>
             </ScrollView>
+            <LoadingOverlay visible={loading} text="Enviando..." />
         </View>
     );
 }

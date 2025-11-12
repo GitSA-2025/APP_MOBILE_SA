@@ -16,11 +16,13 @@ import api from '../../api/api';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 import { StatusBar } from 'expo-status-bar';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 
 export default function DeliveryRegisterScreen() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [entregas, setEntregas] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -31,6 +33,8 @@ export default function DeliveryRegisterScreen() {
             let isActive = true;
 
             const fetchEntregas = async () => {
+
+                setLoading(true);
                 try {
                     const res = await api.post('/api/mobile/app/exibirEntregas', { user_email });
                     if (res && res.data) {
@@ -42,6 +46,9 @@ export default function DeliveryRegisterScreen() {
                 } catch (err) {
                     console.error('Erro ao carregar entregas:', err.response?.data || err.message);
                     setEntregas([]);
+                }
+                finally{
+                    setLoading(false);
                 }
             };
 
@@ -118,6 +125,7 @@ export default function DeliveryRegisterScreen() {
 
                     </View>
                 </ScrollView>
+                <LoadingOverlay visible={loading} text="Carregando..." />
             </View>
         </SafeAreaView>
     );

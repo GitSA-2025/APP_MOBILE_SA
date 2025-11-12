@@ -18,6 +18,7 @@ import TwoFA from './src/screens/twoFA';
 import EditEntryRegister from './src/screens/EditEntryRegister';
 import EditDeliveryRegister from './src/screens/EditDeliveryRegister';
 import Reports from './src/screens/Reports';
+import ConfigScreen from './src/screens/ConfigScreen';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -60,6 +61,7 @@ function App() {
         <Stack.Screen name="EditDeliveryRegister" component={EditDeliveryRegister} options={{ headerShown: false}}/>
         <Stack.Screen name="Reports" component={Reports} options={{ headerShown: false}}/>
         <Stack.Screen name="QrCodeApproval" component={QrCodeApproval} options={{ headerShown: false}}/>
+        <Stack.Screen name="ConfigScreen" component={ConfigScreen} options={{ headerShown: false}}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

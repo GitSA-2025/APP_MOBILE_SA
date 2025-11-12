@@ -3,6 +3,7 @@ import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AnimatedInput from '../../components/AnimatedInput';
 import AnimatedSelect from '../../components/AnimatedSelect';
+import LoadingOverlay from '../../components/LoadingOverlay';
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../api/api';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
@@ -21,12 +22,15 @@ export default function EditEntryRegister() {
     const [dados, setDados] = useState([]);
     const [visibleModal, setVisibleModal] = useState(false);
     const [visibleModalDelete, setVisibleModalDelete] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
             let isActive = true;
 
             const fetchDados = async () => {
+
+                setLoading(true);
                 try {
                     const res = await api.get(`/api/mobile/app/exibirEntradas/${entry.idregister}`);
                     const data = res.data;
@@ -43,6 +47,9 @@ export default function EditEntryRegister() {
                 } catch (err) {
                     console.error('Erro ao carregar entradas:', err.response?.data || err.message);
                 }
+                finally{
+                    setLoading(false);
+                }
             };
 
             fetchDados();
@@ -56,12 +63,17 @@ export default function EditEntryRegister() {
 
     async function editar(idRegister, nome, tipoPessoa, cpf, placa) {
         const dados = { nome, tipo: tipoPessoa, cpf, placa };
+        if (loading) return;
+        setLoading(true);
         try {
             const res = await api.post(`/api/mobile/app/editarRegistroEntrada/${idRegister}`, dados);
             return res.data;
         } catch (err) {
             console.error('Erro ao editar:', err.response?.data || err.message);
             throw err;
+        }
+        finally{
+            setLoading(false);
         }
     }
 

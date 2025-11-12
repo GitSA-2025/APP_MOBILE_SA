@@ -3,6 +3,7 @@ import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AnimatedInput from '../../components/AnimatedInput';
+import LoadingOverlay from '../../components/LoadingOverlay';
 import { useState, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../api/api';
@@ -14,6 +15,7 @@ export default function DeliveryRegister() {
     const [hrEntrada, setHrEntrada] = useState('');
     const [placa, setPlaca] = useState('');
     const [nNota, setNNota] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -61,12 +63,18 @@ export default function DeliveryRegister() {
             return;
         }
 
+        if (loading) return;
+        setLoading(true);
+
         try {
             await registrar(nome, fornecedor, telefone, placa, nNota, user_email);
             Alert.alert('Sucesso', 'Registro salvo com sucesso! Retornando para tela inicial.');
             navigation.goBack();
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar o registro. Tente novamente.');
+        }
+        finally{
+            setLoading(false);
         }
     };
 
@@ -145,6 +153,7 @@ export default function DeliveryRegister() {
                     </View>
                 </View>
             </ScrollView>
+            <LoadingOverlay visible={loading} text="Carregando..." />
         </View>
     );
 }

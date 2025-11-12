@@ -32,6 +32,10 @@ const Sidebar = ({ isOpen, onClose }) => {
         navigation.navigate('QrCodeApproval', { user_email });
     };
 
+    const handleConfigScreen = () => {
+        navigation.navigate('ConfigScreen', { user_email });
+    };
+
     const handleLogout = () => {
         AsyncStorage.removeItem('userToken');
         navigation.reset({
@@ -39,6 +43,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             routes: [{ name: 'Login' }],
         });
     }
+    
 
     return (
         <View style={styles.sidebar}>
@@ -84,7 +89,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <Text style={styles.menuItemText}>Editar conta</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} onPress={handleConfigScreen}>
                         <Feather name="settings" size={24} color="white" />
                         <Text style={styles.menuItemText}>Configurações</Text>
                     </TouchableOpacity>

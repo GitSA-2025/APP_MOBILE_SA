@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import LoadingOverlay from '../../components/LoadingOverlay';
 import AnimatedInput from '../../components/AnimatedInput';
 
 export default function Login() {
@@ -12,6 +12,7 @@ export default function Login() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [loading, setLoading] = useState(false);
 
     async function login(email, senha) {
         const dados = { email, senha };
@@ -38,6 +39,9 @@ export default function Login() {
             return;
         }
 
+        if (loading) return;
+        setLoading(true);
+
         try {
             await login(email, senha);
             Alert.alert('Seja bem vindo!', 'Login realizado com sucesso!');
@@ -49,6 +53,9 @@ export default function Login() {
             } else {
                 Alert.alert('Erro', 'Não foi possível realizar o login. Tente novamente.');
             }
+        }
+        finally{
+            setLoading(true);
         }
     };
 
@@ -102,6 +109,7 @@ export default function Login() {
                     </View>
                 </View>
             </ScrollView>
+            <LoadingOverlay visible={loading} text="Carregando..." />
         </KeyboardAvoidingView>
     );
 

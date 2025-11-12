@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { View, Text, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, StyleSheet, SafeAreaView, SafeAreaViewBase } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, SafeAreaView, ScrollView} from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import api from '../../api/api';
 import Sidebar from '../../components/Sidebar';
@@ -34,7 +34,11 @@ export default function Repost() {
         try {
             const dados = { dataInicio, dataFim };
 
-            const res = await api.post('/api/mobile/app/gerarGraficoIA', dados);
+            const res = await api.post(
+                '/api/mobile/app/gerarGraficoIA',
+                { dataInicio, dataFim },
+                { headers: { "Content-Type": "application/json" } }
+            );
             const graficoData = res.data.grafico;
 
             console.log("Dados do Gráfico Recebidos:", graficoData);
@@ -103,8 +107,8 @@ export default function Repost() {
 
                         {/* Dados */}
 
-                        <View style={styles.painelLeft}>
-                            <Text style={styles.textDesc}>De acordo com os dados analisados pela IA, o total de pessoas que tiveram o acesso a empresa durante o periodo foi de {totalGeral} pessoas, sendo elas:</Text>
+                        <SafeAreaView style={styles.painelLeft}>
+                            <Text style={styles.textDesc}>Segundo os dados analisados pela IA, {totalGeral} acessaram a empresa neste periodo. Sendo elas: </Text>
                             <View style={styles.labelColabo}>
                                 <Text style={styles.labelText}>{valorColaboradores} Colaboradores</Text>
                             </View>
@@ -114,7 +118,7 @@ export default function Repost() {
                             <View style={styles.labelEntr}>
                                 <Text style={styles.labelText}>{valorEntregadores} Entregadores</Text>
                             </View>
-                        </View>
+                        </SafeAreaView>
                         {/*Gráfico*/}
                         <View style={styles.painelRight}>
                             <BarChart

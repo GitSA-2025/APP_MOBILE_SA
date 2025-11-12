@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
     painelLeft: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: width * 0.3
+        width: width * 0.3,
+        height: 100,
+        paddingHorizontal: 10
     },
     secoundContainer: {
         flex: 1,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 
     textDesc: {
         fontStyle: '600',
-        fontSize: 20,
+        fontSize: 16,
         marginBottom: 20
     },
 

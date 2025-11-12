@@ -14,11 +14,14 @@ import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 import { StatusBar } from 'expo-status-bar';
 import SearchInput from '../../components/SearchInput';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [entradas, setEntradas] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const navigation = useNavigation();
   const route = useRoute();
   const { user_email } = route.params;
@@ -33,6 +36,8 @@ export default function Home() {
     useCallback(() => {
       let isActive = true;
 
+      setLoading(true);
+
       const fetchEntradas = async (user_email) => {
         try {
           const res = await api.post('/api/mobile/app/exibirEntradas', { user_email });
@@ -40,12 +45,16 @@ export default function Home() {
         } catch (err) {
           console.error('Erro ao carregar entradas:', err.response?.data);
         }
+        finally{
+          setLoading(false);
+        }
       };
 
       fetchEntradas(user_email);
 
       return () => {
         isActive = false;
+        setLoading(false);
       };
     }, [user_email])
   );
@@ -70,6 +79,7 @@ export default function Home() {
         <Header onMenuPress={() => setSidebarOpen(!sidebarOpen)} />
 
         <ScrollView contentContainerStyle={styles.contentContainer}>
+          <LoadingOverlay visible={loading} text="Carregando..." />
           <View style={styles.registrosHeader}>
             <Text style={styles.registrosTitle}>Registros</Text>
             <TouchableOpacity
@@ -142,6 +152,7 @@ export default function Home() {
               </View>
             ))}
           </View>
+          
         </ScrollView>
       </View>
     </SafeAreaView>
