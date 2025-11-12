@@ -3,6 +3,7 @@ import styles from './styles';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../api/api';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 import AnimatedInput from '../../components/AnimatedInput';
 
@@ -28,6 +29,8 @@ export default function Register() {
     const [senha, setSenha] = useState('');
     const [repetirSenha, setRepetirSenha] = useState('');
 
+    const [loading, setLoading] = useState(false);
+
     const handleRegister = () => {
         navigation.navigate('Login');
     };
@@ -43,12 +46,18 @@ export default function Register() {
             return;
         }
 
+        if (loading) return;
+        setLoading(true);
+
         try {
             await cadastro(nome, email, telefone, senha);
             Alert.alert('Sucesso', 'Cadastro realizado com sucesso! Faça a verificação de 2 fatores.');
             navigation.navigate('TwoFA', { email });
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar o cadastro. Tente novamente.');
+        }
+        finally{
+            setLoading(false);
         }
     };
 
@@ -120,6 +129,7 @@ export default function Register() {
             </ScrollView>
         </View>
             </ScrollView>
+            <LoadingOverlay visible={loading} text="Carregando..." />
         </KeyboardAvoidingView>
     );
 }
