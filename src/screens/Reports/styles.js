@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     },
 
     textHeader: {
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: '700',
         color: '#1B202A',
     },

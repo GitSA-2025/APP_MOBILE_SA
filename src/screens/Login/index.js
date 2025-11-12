@@ -55,8 +55,9 @@ export default function Login() {
             }
         }
         finally{
-            setLoading(true);
+            setLoading(false);
         }
+
     };
 
     return (
