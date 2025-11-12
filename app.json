@@ -2,7 +2,7 @@
   "expo": {
     "name": "SA",
     "slug": "APP_MOBILE_SA",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "landscape",
     "icon": "./assets/icon_sa.png",
     "userInterfaceStyle": "light",
