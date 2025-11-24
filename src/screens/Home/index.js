@@ -21,6 +21,8 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [entradas, setEntradas] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -30,50 +32,54 @@ export default function Home() {
     navigation.navigate('EntryRegister', { user_email: user_email });
   };
 
+  async function marcarSaida(idregister) {
+    try {
+      setLoading(true);
+
+      const res = await api.get(`/api/mobile/app/marcarSaidaRegistroEntrada/${idregister}`);
+      console.log(res.data);
+      setVisibleModal(false);
+      await fetchEntradas(user_email);
+
+    } catch (err) {
+      console.error('Erro ao registrar saída:', err.response?.data || err.message);
+    } finally {
+      setVisibleModal(false);
+      setLoading(false);
+    }
+  }
+
+  async function fetchEntradas(email) {
+    try {
+      const res = await api.post('/api/mobile/app/exibirEntradas', { user_email: email });
+      setEntradas(res.data);
+    } catch (err) {
+      console.error('Erro ao carregar entradas:', err.response?.data);
+    }
+  }
 
 
   useFocusEffect(
     useCallback(() => {
-      let isActive = true;
-
-      setLoading(true);
-
-      const fetchEntradas = async (user_email) => {
-        try {
-          const res = await api.post('/api/mobile/app/exibirEntradas', { user_email });
-          if (isActive) setEntradas(res.data);
-        } catch (err) {
-          console.error('Erro ao carregar entradas:', err.response?.data);
-        }
-        finally{
-          setLoading(false);
-        }
-      };
-
       fetchEntradas(user_email);
-
-      return () => {
-        isActive = false;
-        setLoading(false);
-      };
     }, [user_email])
   );
 
   const handleFilterChange = async (filtro) => {
-          try {
-              const res = await api.post('/api/mobile/app/filtrarEntradas', {
-                  user_email,
-                  filtro,
-              });
-              setEntradas(res.data);
-          } catch (err) {
-              console.error('Erro ao aplicar filtro:', err.response?.data || err.message);
-          }
-      };
+    try {
+      const res = await api.post('/api/mobile/app/filtrarEntradas', {
+        user_email,
+        filtro,
+      });
+      setEntradas(res.data);
+    } catch (err) {
+      console.error('Erro ao aplicar filtro:', err.response?.data || err.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style='light'/>
+      <StatusBar style='light' />
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <View style={{ flex: 1, marginLeft: sidebarOpen ? 230 : 0 }}>
         <Header onMenuPress={() => setSidebarOpen(!sidebarOpen)} />
@@ -138,9 +144,21 @@ export default function Home() {
                 <Text style={[styles.tableCell, styles.cellTime]}>
                   {item.hr_entry || '-'}
                 </Text>
-                <Text style={[styles.tableCell, styles.cellTime]}>
-                  {item.hr_exit || '-'}
-                </Text>
+                <View style={[styles.tableCell, styles.cellTime, { alignItems: 'center' }]}>
+                  {item.hr_exit && item.hr_exit !== '-' ? (
+                    <Text>{item.hr_exit}</Text>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.exitButton}
+                      onPress={() => {
+                        setSelectedId(item.idregister);
+                        setVisibleModal(true);
+                      }}
+                    >
+                      <Text style={styles.exitButtonText}>Registrar saída</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
                 <Text style={[styles.tableCell, styles.cellPlate]}>
                   {item.car_plate || 'Ñ se aplica'}
                 </Text>
@@ -150,10 +168,43 @@ export default function Home() {
                   <Text style={styles.editButtonText}>Editar</Text>
                 </TouchableOpacity>
               </View>
+
+
             ))}
           </View>
-          
+
         </ScrollView>
+
+        {visibleModal && (
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalText}>
+                Deseja marcar saída este registro?
+              </Text>
+
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() => {
+                    setVisibleModal(false);
+                    setSelectedId(null);
+                  }}
+                >
+                  <Text style={styles.buttonText}>Não</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.button, styles.confirmButton]}
+                  onPress={() => marcarSaida(selectedId)}
+                >
+                  <Text style={styles.buttonText}>Sim</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        )}
+
+
       </View>
     </SafeAreaView>
   );

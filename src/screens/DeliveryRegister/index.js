@@ -108,6 +108,7 @@ export default function DeliveryRegister() {
                                 iconName="car"
                                 value={placa}
                                 onChangeText={setPlaca}
+                                mask="plate"
                             />
                             <AnimatedInput
                                 label="Horário da Entrada"
@@ -129,6 +130,7 @@ export default function DeliveryRegister() {
                                 onChangeText={setTelefone}
                                 keyboardType="phone-pad"
                                 placeholder='11999999999'
+                                mask="phone"
                             />
                             <AnimatedInput
                                 label="Nº da nota"

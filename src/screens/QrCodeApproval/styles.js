@@ -104,6 +104,22 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
 
+  createEntryButton: {
+    backgroundColor: '#963232',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  createEntryButtonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+
 });
 
 export default styles;

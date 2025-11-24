@@ -113,8 +113,8 @@ export default function EntryRegister() {
                                 iconName="badge-account-horizontal"
                                 value={cpf}
                                 onChangeText={setCpf}
-                                keyboardType="numeric"
                                 placeholder="somente números"
+                                mask="cpf"
                             />
                             <AnimatedInput
                                 label="Data"
@@ -135,6 +135,7 @@ export default function EntryRegister() {
                                 iconName="car"
                                 value={placa}
                                 onChangeText={setPlaca}
+                                mask="plate"
                             />
                         </View>
 

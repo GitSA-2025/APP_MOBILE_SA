@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -142,6 +143,70 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 6,
   },
+
+  exitButton: {
+    backgroundColor: '#d61818ff',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 6
+  },
+
+  exitButtonText: {
+    color: '#fff',
+    fontWeight: '600'
+  },
+
+  modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 999,
+    },
+    modalContainer: {
+        width: width * 0.8,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalText: {
+        fontSize: 16,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    button: {
+        flex: 1,
+        paddingVertical: 10,
+        marginHorizontal: 5,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    confirmButton: {
+        backgroundColor: '#4CAF50',
+    },
+    cancelButton: {
+        backgroundColor: '#f44336',
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
 });
 
 export default styles;

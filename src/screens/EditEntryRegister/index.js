@@ -20,7 +20,6 @@ export default function EditEntryRegister() {
     const [hrEntrada, setHrEntrada] = useState('');
     const [placa, setPlaca] = useState('');
     const [dados, setDados] = useState([]);
-    const [visibleModal, setVisibleModal] = useState(false);
     const [visibleModalDelete, setVisibleModalDelete] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -89,29 +88,6 @@ export default function EditEntryRegister() {
             navigation.goBack();
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar a edição. Tente novamente.');
-        }
-    };
-
-    async function marcarSaida(idregister) {
-        try {
-            const res = await api.get(`/api/mobile/app/marcarSaidaRegistroEntrada/${idregister}`);
-            console.log(res.data);
-            return res.data;
-        } catch (err) {
-            console.error('Erro ao registrar saída:', err.response?.data || err.message);
-            throw err;
-        }
-    }
-
-    const handleSaida = async () => {
-        try {
-            await marcarSaida(entry.idregister);
-            setVisibleModal(false);
-            Alert.alert('Sucesso', 'Saída marcada com sucesso! Retornando para tela inicial.');
-            navigation.goBack();
-        } catch (err) {
-            setVisibleModal(false);
-            Alert.alert('Erro', 'Não foi possível realizar o registro de saída. Tente novamente.');
         }
     };
 
@@ -197,9 +173,6 @@ export default function EditEntryRegister() {
                             <TouchableOpacity style={styles.btnSalvar} onPress={handleSalvar}>
                                 <Text style={styles.btnText}>Salvar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnSalvar} onPress={() => setVisibleModal(true)}>
-                                <Text style={styles.btnText}>Marcar saída</Text>
-                            </TouchableOpacity>
                             <TouchableOpacity style={styles.btnSalvar} onPress={() => setVisibleModalDelete(true)}>
                                 <Text style={styles.btnText}>Deletar registro</Text>
                             </TouchableOpacity>
@@ -208,30 +181,6 @@ export default function EditEntryRegister() {
                 </View>
             </ScrollView>
 
-            {visibleModal && (
-                <View style={styles.modalOverlay}>
-
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalText}>
-                            Deseja registrar a saída deste registro?
-                        </Text>
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                style={[styles.button, styles.cancelButton]}
-                                onPress={() => setVisibleModal(false)}
-                            >
-                                <Text style={styles.buttonText}>Não</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.button, styles.confirmButton]}
-                                onPress={handleSaida}
-                            >
-                                <Text style={styles.buttonText}>Sim</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            )}
 
             {visibleModalDelete && (
                 <View style={styles.modalOverlay}>

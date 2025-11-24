@@ -1,19 +1,39 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import {
     Feather,
     MaterialCommunityIcons,
     FontAwesome5,
 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import api from '../api/api';
 
 const Sidebar = ({ isOpen, onClose }) => {
+    const [dados, setDados] = useState({});
+
     const navigation = useNavigation();
     const route = useRoute();
-    const { user_email } = route.params;
+    const { user_email } = route.params || {};
 
+    async function fetchConta(email) {
+        try {
+            const res = await api.post('/api/mobile/app/conta', { user_email: email });
+            setDados(res.data);
+        } catch (err) {
+            console.error('Erro ao carregar conta:', err.response?.data);
+        }
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            if (user_email) {
+                fetchConta(user_email);
+            }
+        }, [user_email])
+    );
+
+    // ✅ Agora o retorno condicional fica DEPOIS dos hooks
     if (!isOpen) return null;
 
     const handlerHome = () => {
@@ -42,16 +62,14 @@ const Sidebar = ({ isOpen, onClose }) => {
             index: 0,
             routes: [{ name: 'Login' }],
         });
-    }
-    
+    };
 
     return (
         <View style={styles.sidebar}>
             <View style={styles.sidebarUser}>
                 <View style={styles.userAvatar} />
                 <View>
-                    <Text style={styles.userName}>Nome do usuário</Text>
-                    <Text style={styles.userRole}>Cargo de atuação</Text>
+                    <Text style={styles.userName}>{dados?.name}</Text>
                 </View>
             </View>
 
@@ -64,12 +82,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <View>
                     <TouchableOpacity style={styles.menuItem} onPress={handlerHome}>
                         <MaterialCommunityIcons name="clock-outline" size={24} color="white" />
-                        <Text style={styles.menuItemText}>Registros</Text>
+                        <Text style={styles.menuItemText}>Registros de Entrada</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.menuItem} onPress={handleDeliveryRegister}>
                         <MaterialCommunityIcons name="truck-delivery-outline" size={24} color="white" />
-                        <Text style={styles.menuItemText}>Fila de entregas</Text>
+                        <Text style={styles.menuItemText}>Registros de Entrega</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.menuItem} onPress={handleReports}>
@@ -78,7 +96,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.menuItem} onPress={handleQrCodeApproval}>
-                        <MaterialCommunityIcons name="qrcode-scan" size={24} color="white" />
+                        <MaterialCommunityIcons name="qrcode" size={24} color="white" />
                         <Text style={styles.menuItemText}>Aprovação{'\n'}QrCode</Text>
                     </TouchableOpacity>
                 </View>

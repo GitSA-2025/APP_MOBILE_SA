@@ -14,8 +14,8 @@ import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useCallback } from 'react';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Feather } from '@expo/vector-icons';
-
 
 
 export default function QrCodeApproval() {
@@ -96,6 +96,10 @@ export default function QrCodeApproval() {
         );
     }, [user_email, fetchReqs]);
 
+    const handleQRCodeScan = () => {
+        navigation.navigate('QRCodeScan', { user_email });
+    };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -108,6 +112,16 @@ export default function QrCodeApproval() {
                 <ScrollView style={styles.content}>
                     <View style={styles.header}>
                         <Text style={styles.title}>Aprovação de QRCode</Text>
+                        <TouchableOpacity
+                            style={styles.createEntryButton}
+                            activeOpacity={0.8}
+                            onPress={handleQRCodeScan}
+                        >
+                            <MaterialCommunityIcons name="qrcode-scan" size={24} color="white" />
+                            <Text style={styles.createEntryButtonText}>
+                                Escanear QRCode e Fazer Registro
+                            </Text>
+                        </TouchableOpacity>
                     </View>
 
 
@@ -122,6 +136,7 @@ export default function QrCodeApproval() {
                         <View style={styles.tableContainer}>
                             <View style={styles.tableHeaderRow}>
                                 <Text style={[styles.tableHeaderCell, styles.cellName]}>Nome do Requisitante</Text>
+                                <Text style={[styles.tableHeaderCell, styles.cellName]}>CPF</Text>
                                 <Text style={[styles.tableHeaderCell, styles.cellEdit]}>Aprovar</Text>
                                 <Text style={[styles.tableHeaderCell, styles.cellEdit]}>Negar</Text>
                             </View>
@@ -133,6 +148,7 @@ export default function QrCodeApproval() {
                                     <View key={item.id || item.id} style={styles.tableRow}>
                                         <Text style={[styles.tableCell, styles.cellName]}>{item.name}</Text>
 
+                                        <Text style={[styles.tableCell, styles.cellName]}>{item.cpf}</Text>
                                         <TouchableOpacity
                                             style={styles.aprovButton}
                                             onPress={() => handleDecision(item.id, 'aprovado')}
