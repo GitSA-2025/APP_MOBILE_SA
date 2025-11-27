@@ -1,16 +1,33 @@
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+// Componentes básicos do React Native
+
 import styles from './styles';
+// Importa os estilos da tela
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+// Ícones do Expo
+
 import AnimatedInput from '../../components/AnimatedInput';
+// Input animado customizado
+
 import { useState, useCallback } from 'react';
+// Hooks do React
+
 import api from '../../api/api';
+// Instância do axios para chamadas API
+
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+// Hooks do React Navigation
+
 
 export default function EditDeliveryRegister() {
+    // Componente principal da tela de edição de registro de entrega
+
     const route = useRoute();
     const navigation = useNavigation();
     const { entry } = route.params;
+    // Recebe o registro selecionado via parâmetros de rota
 
     const [nome, setNome] = useState('');
     const [fornecedor, setFornecedor] = useState('');
@@ -19,14 +36,17 @@ export default function EditDeliveryRegister() {
     const [placa, setPlaca] = useState('');
     const [nNota, setNNota] = useState('');
     const [visibleModalDelete, setVisibleModalDelete] = useState(false);
+    // Estados para cada campo do formulário e modal de delete
 
     useFocusEffect(
         useCallback(() => {
             const fetchDados = async () => {
+                // Função que carrega os dados do registro quando a tela ganha foco
                 try {
                     const res = await api.get(`/api/mobile/app/exibirEntregas/${entry.idregister}`);
                     const data = res.data;
 
+                    // Atualiza estados com os dados retornados
                     setNome(data.nome || '');
                     setFornecedor(data.industria || '');
                     setTelefone(data.telefone || data.cpf || '');
@@ -45,6 +65,7 @@ export default function EditDeliveryRegister() {
     );
 
     async function editar(idRegister, nome, fornecedor, telefone, placa, nNota, hrEntrada) {
+        // Função que envia os dados editados para a API
         const dados = {
             nome,
             telefone,
@@ -63,6 +84,7 @@ export default function EditDeliveryRegister() {
     }
 
     const handleSalvar = async () => {
+        // Validação de campos obrigatórios
         if (!nome || !fornecedor || !telefone || !placa || !nNota) {
             Alert.alert('Atenção', 'Preencha todos os campos obrigatórios!');
             return;
@@ -71,13 +93,14 @@ export default function EditDeliveryRegister() {
         try {
             await editar(entry.idregister, nome, fornecedor, telefone, placa, nNota, hrEntrada);
             Alert.alert('Sucesso', 'Registro editado com sucesso! Retornando para tela inicial.');
-            navigation.goBack();
+            navigation.goBack(); // Retorna à tela anterior
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar a edição. Tente novamente.');
         }
     };
 
     async function deletar(idregister) {
+        // Função que envia requisição para deletar registro
         try {
             const res = await api.get(`/api/mobile/app/deletarRegistroEntrega/${idregister}`);
             console.log(res.data);
@@ -89,6 +112,7 @@ export default function EditDeliveryRegister() {
     }
 
     const handleDeletar = async () => {
+        // Handler para o botão de confirmar delete
         try {
             await deletar(entry.idregister);
             setVisibleModalDelete(false);
@@ -110,9 +134,11 @@ export default function EditDeliveryRegister() {
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrada</Text>
                     </View>
+                    {/* Cabeçalho com botão de voltar */}
 
                     <View style={styles.fullPainel}>
                         <View style={styles.painelLeft}>
+                            {/* Lado esquerdo do formulário */}
                             <AnimatedInput label="Nome" iconName="account" value={nome} onChangeText={setNome} />
                             <AnimatedInput label="Placa do Veículo" iconName="car" value={placa} onChangeText={setPlaca} />
                             <AnimatedInput label="Horário da Entrada" iconName="clock-time-four-outline" value={hrEntrada} onChangeText={setHrEntrada} editable={false} />
@@ -122,6 +148,7 @@ export default function EditDeliveryRegister() {
                         </View>
 
                         <View style={styles.painelRight}>
+                            {/* Lado direito do formulário */}
                             <TouchableOpacity style={styles.photo}>
                                 <MaterialCommunityIcons name="truck-minus" size={80} color="#344650" />
                             </TouchableOpacity>
@@ -140,6 +167,7 @@ export default function EditDeliveryRegister() {
             </ScrollView>
 
             {visibleModalDelete && (
+                // Modal de confirmação de delete
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <Text style={styles.modalText}>Deseja deletar este registro?</Text>

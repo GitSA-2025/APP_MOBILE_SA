@@ -1,17 +1,34 @@
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+// Componentes básicos do React Native
+
 import styles from './styles';
+// Importa os estilos específicos desta tela
+
 import Ionicons from '@expo/vector-icons/Ionicons';
+// Ícones do Expo
+
 import AnimatedInput from '../../components/AnimatedInput';
 import AnimatedSelect from '../../components/AnimatedSelect';
 import LoadingOverlay from '../../components/LoadingOverlay';
+// Componentes customizados: inputs animados, select animado e overlay de loading
+
 import { useState, useEffect, useCallback } from 'react';
+// Hooks do React
+
 import api from '../../api/api';
+// Instância do axios para chamadas à API
+
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+// Hooks do React Navigation
+
 
 export default function EditEntryRegister() {
+    // Componente principal da tela de edição de registro de entrada
+
     const route = useRoute();
     const navigation = useNavigation();
     const { entry } = route.params;
+    // Recebe os dados do registro selecionado via parâmetros de rota
 
     const [nome, setNome] = useState('');
     const [tipoPessoa, setTipoPessoa] = useState('');
@@ -22,13 +39,14 @@ export default function EditEntryRegister() {
     const [dados, setDados] = useState([]);
     const [visibleModalDelete, setVisibleModalDelete] = useState(false);
     const [loading, setLoading] = useState(false);
+    // Estados para cada campo do formulário, modal de delete, dados completos e loading
 
     useFocusEffect(
         useCallback(() => {
             let isActive = true;
+            // Marca se o componente ainda está ativo, evitando updates após sair da tela
 
             const fetchDados = async () => {
-
                 setLoading(true);
                 try {
                     const res = await api.get(`/api/mobile/app/exibirEntradas/${entry.idregister}`);
@@ -41,6 +59,7 @@ export default function EditEntryRegister() {
                     setData(data.data || '');
                     setPlaca(data.placa || '');
                     setHrEntrada(data.hrentrada || '');
+                    // Atualiza os estados com os dados recebidos da API
 
                     console.log("Dados carregados:", data);
                 } catch (err) {
@@ -56,9 +75,9 @@ export default function EditEntryRegister() {
             return () => {
                 isActive = false;
             };
-
         }, [entry.idregister])
     );
+    // useFocusEffect garante que os dados sejam carregados sempre que a tela ganhar foco
 
     async function editar(idRegister, nome, tipoPessoa, cpf, placa) {
         const dados = { nome, tipo: tipoPessoa, cpf, placa };
@@ -75,6 +94,7 @@ export default function EditEntryRegister() {
             setLoading(false);
         }
     }
+    // Função que envia os dados editados para a API
 
     const handleSalvar = async () => {
         if (!nome || !cpf || !tipoPessoa) {
@@ -90,6 +110,7 @@ export default function EditEntryRegister() {
             Alert.alert('Erro', 'Não foi possível realizar a edição. Tente novamente.');
         }
     };
+    // Handler do botão "Salvar", com validação de campos obrigatórios
 
     async function deletar(idregister) {
         try {
@@ -101,6 +122,7 @@ export default function EditEntryRegister() {
             throw err;
         }
     }
+    // Função que envia requisição para deletar o registro
 
     const handleDeletar = async () => {
         try {
@@ -113,7 +135,7 @@ export default function EditEntryRegister() {
             Alert.alert('Erro', 'Não foi possível deletar o registro. Tente novamente.');
         }
     };
-
+    // Handler do botão "Deletar", com modal de confirmação
 
     return (
         <View style={styles.container}>
@@ -125,14 +147,17 @@ export default function EditEntryRegister() {
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Registro de entrada</Text>
                     </View>
+                    {/* Cabeçalho com botão de voltar */}
 
                     <View style={styles.fullPainel}>
                         <View style={styles.painelLeft}>
+                            {/* Lado esquerdo do formulário */}
                             <AnimatedInput 
-                            label="Nome" 
-                            iconName="account" 
-                            value={nome} 
-                            onChangeText={setNome} />
+                                label="Nome" 
+                                iconName="account" 
+                                value={nome} 
+                                onChangeText={setNome} 
+                            />
                             <AnimatedSelect
                                 label="Selecione o tipo de pessoa"
                                 iconName="account-group"
@@ -141,30 +166,35 @@ export default function EditEntryRegister() {
                                 onSelect={setTipoPessoa}
                             />
                             <AnimatedInput 
-                            label="CPF" 
-                            iconName="badge-account-horizontal" 
-                            value={cpf} 
-                            onChangeText={setCpf} />
+                                label="CPF" 
+                                iconName="badge-account-horizontal" 
+                                value={cpf} 
+                                onChangeText={setCpf} 
+                            />
                             <AnimatedInput 
-                            label="Data" 
-                            iconName="calendar" 
-                            value={data} 
-                            onChangeText={setData} 
-                            editable={false} />
+                                label="Data" 
+                                iconName="calendar" 
+                                value={data} 
+                                onChangeText={setData} 
+                                editable={false} 
+                            />
                             <AnimatedInput 
-                            label="Horário da Entrada" 
-                            iconName="clock-time-four-outline" 
-                            value={hrEntrada} 
-                            onChangeText={setHrEntrada} 
-                            editable={false} />
+                                label="Horário da Entrada" 
+                                iconName="clock-time-four-outline" 
+                                value={hrEntrada} 
+                                onChangeText={setHrEntrada} 
+                                editable={false} 
+                            />
                             <AnimatedInput 
-                            label="Placa do Veículo" 
-                            iconName="car" 
-                            value={placa} 
-                            onChangeText={setPlaca} />
+                                label="Placa do Veículo" 
+                                iconName="car" 
+                                value={placa} 
+                                onChangeText={setPlaca} 
+                            />
                         </View>
 
                         <View style={styles.painelRight}>
+                            {/* Lado direito do formulário */}
                             <TouchableOpacity style={styles.photo}>
                                 <Ionicons name="person-outline" size={80} color="#344650" />
                             </TouchableOpacity>
@@ -181,10 +211,9 @@ export default function EditEntryRegister() {
                 </View>
             </ScrollView>
 
-
             {visibleModalDelete && (
+                // Modal de confirmação de delete
                 <View style={styles.modalOverlay}>
-
                     <View style={styles.modalContainer}>
                         <Text style={styles.modalText}>
                             Deseja deletar este registro?

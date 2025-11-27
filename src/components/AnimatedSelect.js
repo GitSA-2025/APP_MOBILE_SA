@@ -3,66 +3,64 @@ import { StyleSheet, TouchableOpacity, View, Text, FlatList, Pressable } from 'r
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+// Componente customizado de select animado com label flutuante, ícone e dropdown
 const AnimatedSelect = ({ label, iconName, options = [], value, onSelect }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const labelAndIconPosition = useSharedValue(0);
+  const [isFocused, setIsFocused] = useState(false); // Controle do foco/label flutuante
+  const [isOpen, setIsOpen] = useState(false);       // Controle de abertura do dropdown
+  const labelAndIconPosition = useSharedValue(0);    // Valor compartilhado para animação da label
 
-  const hasValue = !!value;
+  const hasValue = !!value; // Verifica se há valor selecionado
 
+  // Efeito para animar label quando o input está focado ou possui valor
   useEffect(() => {
     if (isFocused || hasValue) {
-      labelAndIconPosition.value = withTiming(-30, {
-        duration: 250,
-        easing: Easing.inOut(Easing.ease),
-      });
+      labelAndIconPosition.value = withTiming(-30, { duration: 250, easing: Easing.inOut(Easing.ease) });
     } else {
-      labelAndIconPosition.value = withTiming(0, {
-        duration: 250,
-        easing: Easing.inOut(Easing.ease),
-      });
+      labelAndIconPosition.value = withTiming(0, { duration: 250, easing: Easing.inOut(Easing.ease) });
     }
   }, [isFocused, hasValue, labelAndIconPosition]);
 
+  // Estilo animado da label e ícone
   const labelAndIconAnimatedStyle = useAnimatedStyle(() => {
     const isFloating = isFocused || hasValue;
-
     return {
       transform: [
-        { translateY: labelAndIconPosition.value },
-        { scale: withTiming(isFloating ? 0.8 : 1, { duration: 250 }) }
+        { translateY: labelAndIconPosition.value }, // Move a label para cima
+        { scale: withTiming(isFloating ? 0.8 : 1, { duration: 250 }) } // Reduz tamanho quando flutua
       ],
-      color: withTiming(isFloating ? '#0E2941' : '#888', { duration: 250 }),
+      color: withTiming(isFloating ? '#0E2941' : '#888', { duration: 250 }), // Muda cor da label
     };
   });
 
-  const borderAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      borderColor: withTiming(isFocused ? '#0E2941' : '#ccc', { duration: 250 }),
-    };
-  });
+  // Estilo animado da borda
+  const borderAnimatedStyle = useAnimatedStyle(() => ({
+    borderColor: withTiming(isFocused ? '#0E2941' : '#ccc', { duration: 250 }),
+  }));
 
-  const dropdownAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      maxHeight: withTiming(isOpen ? 180 : 0, { duration: 250 }),
-      opacity: withTiming(isOpen ? 1 : 0, { duration: 200 }),
-    };
-  });
+  // Estilo animado do dropdown (altura e opacidade)
+  const dropdownAnimatedStyle = useAnimatedStyle(() => ({
+    maxHeight: withTiming(isOpen ? 180 : 0, { duration: 250 }), // Altura do dropdown
+    opacity: withTiming(isOpen ? 1 : 0, { duration: 200 }),     // Transparência
+  }));
 
+  // Alterna abertura/fechamento do dropdown e foco
   const handleToggle = () => {
-    setIsFocused(!isOpen);
+    setIsFocused(!isOpen); // Label flutuante enquanto aberto
     setIsOpen(!isOpen);
   };
 
+  // Seleciona um item e fecha o dropdown
   const handleSelect = (item) => {
-    onSelect(item);
-    setIsFocused(false);
-    setIsOpen(false);
+    onSelect(item);      // Passa valor selecionado
+    setIsFocused(false); // Remove foco da label
+    setIsOpen(false);    // Fecha dropdown
   };
 
   return (
     <View style={{ width: '100%' }}>
+      {/* Container principal */}
       <Animated.View style={[styles.container, borderAnimatedStyle]}>
+        {/* Label e ícone animados */}
         <Animated.View
           style={[
             styles.contentWrapper,
@@ -74,9 +72,10 @@ const AnimatedSelect = ({ label, iconName, options = [], value, onSelect }) => {
           <Animated.Text style={styles.label}>{label}</Animated.Text>
         </Animated.View>
 
+        {/* Input simulado (abre dropdown ao clicar) */}
         <TouchableOpacity style={styles.input} onPress={handleToggle} activeOpacity={0.7}>
           <Text style={[styles.valueText, !value && styles.placeholderText]}>
-            {value || 'Selecionar...'}
+            {value || 'Selecionar...'} {/* Mostra valor ou placeholder */}
           </Text>
           <MaterialCommunityIcons
             name={isOpen ? 'chevron-up' : 'chevron-down'}
@@ -86,12 +85,12 @@ const AnimatedSelect = ({ label, iconName, options = [], value, onSelect }) => {
         </TouchableOpacity>
       </Animated.View>
 
-      {/* Dropdown */}
+      {/* Dropdown animado */}
       <Animated.View style={[styles.dropdownContainer, dropdownAnimatedStyle]}>
         <FlatList
-          data={options}
+          data={options} // Lista de opções
           keyExtractor={(item, index) => index.toString()}
-          scrollEnabled={options.length > 4}
+          scrollEnabled={options.length > 4} // Habilita scroll se tiver muitas opções
           renderItem={({ item }) => (
             <Pressable style={styles.option} onPress={() => handleSelect(item)}>
               <Text style={styles.optionText}>{item}</Text>
@@ -103,6 +102,7 @@ const AnimatedSelect = ({ label, iconName, options = [], value, onSelect }) => {
   );
 };
 
+// =================== ESTILOS ===================
 const styles = StyleSheet.create({
   container: {
     width: '100%',

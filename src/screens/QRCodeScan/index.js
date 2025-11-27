@@ -1,21 +1,41 @@
 import React, { useEffect, useState } from 'react';
+// React e hooks de estado e efeito
+
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+// Componentes básicos do React Native: container, textos, botão, alertas e estilos
+
 import { CameraView, Camera } from 'expo-camera';
+// Componentes da câmera do Expo
+
 import api from '../../api/api';
+// Instância do Axios configurada para comunicação com a API
+
 import styles from './styles';
+// Estilos customizados da tela
+
 import { useNavigation, useRoute } from '@react-navigation/native';
+// Hooks para navegação e pegar parâmetros da rota
 
 export default function ScanQRCodeScreen() {
     const [hasPermission, setHasPermission] = useState(null);
+    // Estado para saber se o usuário deu permissão para usar a câmera
+
     const [scanned, setScanned] = useState(false);
+    // Estado para controlar se um QR Code já foi lido
+
     const [qrData, setQrData] = useState(null);
+    // Estado para armazenar os dados do QR Code lido
+
     const [loading, setLoading] = useState(false);
+    // Estado para mostrar loading durante requisições
 
     const navigation = useNavigation();
     const route = useRoute();
     const { user_email } = route.params;
+    // Pegando o email do usuário logado passado pela rota
 
     useEffect(() => {
+        // Solicita permissão para usar a câmera assim que a tela é montada
         (async () => {
             const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === 'granted');
@@ -23,18 +43,21 @@ export default function ScanQRCodeScreen() {
     }, []);
 
     const handleBarcodeScanned = ({ data }) => {
-        if (scanned) return;
+        // Função chamada quando um QR Code é detectado
+        if (scanned) return; // Se já leu um QR Code, ignora
 
         try {
-            const parsed = JSON.parse(data);
+            const parsed = JSON.parse(data); // Tenta converter o QR Code de JSON para objeto
             setQrData(parsed);
-            setScanned(true);
+            setScanned(true); // Marca como lido
         } catch {
             Alert.alert('Erro', 'QR Code inválido.');
+            // Caso não seja um JSON válido
         }
     };
 
     const confirmarEntrada = async () => {
+        // Função para confirmar a entrada do usuário a partir do QR Code
         try {
             setLoading(true);
 
@@ -47,11 +70,13 @@ export default function ScanQRCodeScreen() {
             };
             
             const res = await api.post('/api/mobile/app/criarRegistroEntrada', dados);
+            // Chama a API para registrar a entrada
 
             Alert.alert('Sucesso', 'Entrada registrada com sucesso!');
             navigation.navigate('Home', { user_email: user_email });
+            // Navega de volta para a tela Home
 
-            // Reset
+            // Reset da leitura do QR Code
             setScanned(false);
             setQrData(null);
             
@@ -65,24 +90,28 @@ export default function ScanQRCodeScreen() {
     };
 
     if (hasPermission === null) {
+        // Enquanto ainda não sabe se tem permissão
         return <Text>Solicitando permissão da câmera...</Text>;
     }
 
     if (hasPermission === false) {
+        // Caso usuário negue permissão
         return <Text>Sem acesso à câmera.</Text>;
     }
 
     return (
         <View style={styles.container}>
             {!scanned ? (
+                // Se ainda não leu o QR Code, mostra a câmera
                 <CameraView
                     style={StyleSheet.absoluteFillObject}
                     barcodeScannerSettings={{
-                        barcodeTypes: ['qr'],
+                        barcodeTypes: ['qr'], // Apenas QR Code
                     }}
                     onBarcodeScanned={handleBarcodeScanned}
                 />
             ) : (
+                // Caso já tenha lido, mostra preview dos dados do QR Code
                 <View style={styles.previewContainer}>
                     <Text style={styles.title}>Confirme os dados</Text>
 

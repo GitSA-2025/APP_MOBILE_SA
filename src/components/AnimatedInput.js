@@ -3,20 +3,22 @@ import { StyleSheet, TextInput } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+// Componente customizado de input animado com label flutuante, ícone e máscaras
 const AnimatedInput = ({
-  label,
-  iconName,
-  mask,
-  value,
-  onChangeText,
-  ...props
+  label,      // Texto do label
+  iconName,   // Nome do ícone
+  mask,       // Tipo de máscara (cpf, phone, plate)
+  value,      // Valor atual do input
+  onChangeText, // Função chamada quando o valor muda
+  ...props    // Outros props passados para o TextInput
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [error, setError] = useState('');
-  const labelAndIconPosition = useSharedValue(0);
+  const [isFocused, setIsFocused] = useState(false); // Controla foco do input
+  const [error, setError] = useState('');            // Mensagem de erro
+  const labelAndIconPosition = useSharedValue(0);    // Valor compartilhado para animação da label
 
-  const hasText = !!value;
+  const hasText = !!value; // Verifica se há texto no input
 
+  // Efeito que anima a label quando o input está focado ou tem texto
   useEffect(() => {
     labelAndIconPosition.value = withTiming(isFocused || hasText ? -30 : 0, {
       duration: 250,
@@ -24,51 +26,53 @@ const AnimatedInput = ({
     });
   }, [isFocused, hasText]);
 
+  // Estilo animado da label e ícone
   const labelAndIconAnimatedStyle = useAnimatedStyle(() => {
     const floating = isFocused || hasText;
     return {
       transform: [
-        { translateY: labelAndIconPosition.value },
-        { scale: withTiming(floating ? 0.8 : 1, { duration: 250 }) }
+        { translateY: labelAndIconPosition.value }, // Move label para cima quando flutua
+        { scale: withTiming(floating ? 0.8 : 1, { duration: 250 }) } // Diminui o tamanho da label
       ],
-      color: withTiming(floating ? '#0E2941' : '#888', { duration: 250 }),
+      color: withTiming(floating ? '#0E2941' : '#888', { duration: 250 }), // Muda cor da label
     };
   });
 
+  // Animação da borda do input
   const borderAnimatedStyle = useAnimatedStyle(() => ({
     borderColor: withTiming(isFocused ? '#0E2941' : '#ccc', { duration: 250 }),
   }));
 
-  // =================== CHANGE ===================
+  // =================== TRATAMENTO DE MUDANÇA DE TEXTO ===================
   const handleChangeText = (text) => {
     let formatted = text;
     let errorMsg = '';
 
     if (mask === 'cpf') {
-      formatted = maskCPF(text);
-      if (formatted.length === 14 && !isValidCPF(formatted)) {
+      formatted = maskCPF(text); // Formata CPF
+      if (formatted.length === 14 && !isValidCPF(formatted)) { // Valida CPF completo
         errorMsg = 'CPF inválido';
       }
     }
 
     if (mask === 'phone') {
-      formatted = maskPhone(text);
+      formatted = maskPhone(text); // Formata telefone
     }
 
     if (mask === 'plate') {
-      formatted = maskPlate(text);
-
-      if (formatted.length >= 7 && !isValidPlate(formatted)) {
+      formatted = maskPlate(text); // Formata placa
+      if (formatted.length >= 7 && !isValidPlate(formatted)) { // Valida placa
         errorMsg = 'Placa inválida';
       }
     }
 
-    setError(errorMsg);
-    onChangeText && onChangeText(formatted);
+    setError(errorMsg);             // Atualiza mensagem de erro
+    onChangeText && onChangeText(formatted); // Passa valor formatado para callback
   };
 
+  // =================== MÁSCARAS ===================
   const maskCPF = (value) => {
-    value = value.replace(/\D/g, '').slice(0, 11);
+    value = value.replace(/\D/g, '').slice(0, 11); // Remove tudo que não é número
 
     if (value.length <= 3) return value;
     if (value.length <= 6) return value.replace(/(\d{3})(\d+)/, '$1.$2');
@@ -89,16 +93,13 @@ const AnimatedInput = ({
 
   const maskPlate = (value) => {
     value = value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 7);
-
     if (value.length <= 3) return value;
     return value.replace(/^([A-Z]{3})([0-9A-Z].*)$/, '$1-$2');
   };
 
   // =================== VALIDAÇÕES ===================
-
   const isValidCPF = (cpf) => {
     cpf = cpf.replace(/\D/g, '');
-
     if (cpf.length !== 11) return false;
     if (/^(\d)\1+$/.test(cpf)) return false;
 
@@ -121,22 +122,11 @@ const AnimatedInput = ({
     return resto === parseInt(cpf.charAt(10));
   };
 
-  // ✅ Padrão antigo: AAA-1234
-  const isOldPlate = (plate) => {
-    const clean = plate.replace('-', '');
-    return /^[A-Z]{3}[0-9]{4}$/.test(clean);
-  };
+  const isOldPlate = (plate) => /^[A-Z]{3}[0-9]{4}$/.test(plate.replace('-', ''));
+  const isMercosulPlate = (plate) => /^[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(plate.replace('-', ''));
+  const isValidPlate = (plate) => isOldPlate(plate) || isMercosulPlate(plate);
 
-  // ✅ Padrão Mercosul: ABC-1D23
-  const isMercosulPlate = (plate) => {
-    const clean = plate.replace('-', '');
-    return /^[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(clean);
-  };
-
-  const isValidPlate = (plate) => {
-    return isOldPlate(plate) || isMercosulPlate(plate);
-  };
-
+  // =================== RENDER ===================
   return (
     <>
       <Animated.View style={[styles.container, borderAnimatedStyle]}>
@@ -166,7 +156,7 @@ const AnimatedInput = ({
   );
 };
 
-// =================== STYLES ===================
+// =================== ESTILOS ===================
 const styles = StyleSheet.create({
   container: {
     width: '100%',

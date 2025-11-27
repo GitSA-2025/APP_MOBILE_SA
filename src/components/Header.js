@@ -1,28 +1,31 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import SearchInput from '../components/SearchInput';
+import SearchInput from '../components/SearchInput'; // Componente de input de busca (não usado nesse trecho)
 
-
+// Componente Header customizável
 const Header = ({
-  onMenuPress,
-  title = 'Sistema de Acesso',
-  showSearch = true,
-  showLogo = true,
+  onMenuPress,              // Função para abrir o menu lateral
+  title = 'Sistema de Acesso', // Texto do título padrão
+  showSearch = true,        // Controle para mostrar ou não o input de busca
+  showLogo = true,          // Controle para mostrar ou não o logo
 }) => {
   return (
     <View style={[styles.header, { position: 'relative', zIndex: 100 }]}>
+      {/* Botão do menu hamburguer */}
       <TouchableOpacity onPress={onMenuPress} style={styles.menuButton} activeOpacity={0.7}>
         <Feather name="menu" size={28} color="white" />
       </TouchableOpacity>
 
+      {/* Título do Header */}
       <Text style={styles.headerTitle}>{title}</Text>
 
+      {/* Logo do lado direito */}
       {showLogo && (
         <View style={styles.logoContainer}>
           <Image
             source={require('../../assets/kozzy_logo_2.png')}
-            style={{ width: '50%', height: 80 }}
+            style={{ width: '50%', height: 80 }} // Ajusta o tamanho do logo
           />
         </View>
       )}
@@ -30,28 +33,29 @@ const Header = ({
   );
 };
 
+// =================== ESTILOS ===================
 const styles = StyleSheet.create({
-    header: {
-    backgroundColor: '#2B3D52',
-    height: 70,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    justifyContent: 'space-between',
+  header: {
+    backgroundColor: '#2B3D52', // Cor de fundo do header
+    height: 70,                  // Altura do header
+    flexDirection: 'row',        // Layout horizontal
+    alignItems: 'center',        // Centraliza verticalmente
+    paddingHorizontal: 12,       // Espaço interno lateral
+    justifyContent: 'space-between', // Espaça os elementos
     position: 'relative',
-    paddingTop: 20
+    paddingTop: 20               // Para dar espaçamento no topo (status bar)
   },
 
   menuButton: {
     padding: 6,
-    marginRight: 12,
+    marginRight: 12, // Espaço entre botão e título
   },
 
   headerTitle: {
     color: 'white',
     fontSize: 18,
     fontWeight: '400',
-    flex: 1,
+    flex: 1, // Faz o título ocupar o espaço restante
   },
 
   searchBox: {
