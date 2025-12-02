@@ -57,10 +57,15 @@ export default function ScanQRCodeScreen() {
     };
 
     const confirmarEntrada = async () => {
-        // Função para confirmar a entrada do usuário a partir do QR Code
         try {
             setLoading(true);
 
+            const qrId = qrData.qrId || null;
+
+            // 1. Validar QR Code
+            const env = await api.post('/api/validar-qrcode', { qrId });
+
+            // 2. Se chegou aqui, é válido
             const dados = {
                 nome: qrData.name,
                 tipo: qrData.type_user,
@@ -68,26 +73,39 @@ export default function ScanQRCodeScreen() {
                 placa: qrData.plate,
                 user_email: user_email
             };
-            
+
             const res = await api.post('/api/mobile/app/criarRegistroEntrada', dados);
-            // Chama a API para registrar a entrada
 
             Alert.alert('Sucesso', 'Entrada registrada com sucesso!');
-            navigation.navigate('Home', { user_email: user_email });
-            // Navega de volta para a tela Home
+            navigation.navigate('Home', { user_email });
 
-            // Reset da leitura do QR Code
             setScanned(false);
             setQrData(null);
-            
-            return res.data;
+
+            return { validacao: env.data, registro: res.data };
+
         } catch (err) {
-            console.error('Erro ao cadastrar:', err.response?.data || err.message);
-            throw err;
+
+            const msg = err.response?.data?.error || err.message;
+
+            if (msg === 'QR Code já utilizado') {
+                Alert.alert('QR Code inválido', 'Esse QR Code já foi utilizado.');
+            }
+            else if (msg === 'QR Code expirado') {
+                Alert.alert('QR Code vencido', 'Esse QR Code já expirou.');
+            }
+            else if (msg === 'QR Code inválido') {
+                Alert.alert('QR Code inválido', 'Esse QR Code não é válido.');
+            }
+            else {
+                Alert.alert('Erro', 'Não foi possível validar o QR Code.');
+            }
+
         } finally {
             setLoading(false);
         }
     };
+
 
     if (hasPermission === null) {
         // Enquanto ainda não sabe se tem permissão

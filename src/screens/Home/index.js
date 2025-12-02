@@ -148,7 +148,7 @@ export default function Home() {
             {entradas.map((item, index) => (
               // Renderiza cada registro como uma linha
               <View key={index} style={styles.tableRow}>
-                <Text style={[styles.tableCell, styles.cellDate]}>{item.date}</Text>
+                <Text style={[styles.tableCell, styles.cellDate]}>{item.date_fixed}</Text>
                 <Text style={[styles.tableCell, styles.cellName]}>{item.name}</Text>
 
                 <View

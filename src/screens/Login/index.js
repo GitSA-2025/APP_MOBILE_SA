@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, Platform, ScrollView } from 'react-native';
 // Importa componentes básicos do React Native: View, Text, botões, alertas, imagens, teclado e scroll
 
 import styles from './styles';
@@ -22,6 +22,7 @@ import LoadingOverlay from '../../components/LoadingOverlay';
 import AnimatedInput from '../../components/AnimatedInput';
 // Componente customizado de input com animação
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function Login() {
     const navigation = useNavigation();
@@ -84,9 +85,11 @@ export default function Login() {
     };
 
     return (
-        <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
         >
             {/* Evita que o teclado sobreponha os inputs */}
             <ScrollView
@@ -142,6 +145,6 @@ export default function Login() {
             </ScrollView>
             <LoadingOverlay visible={loading} text="Carregando..." />
             {/* Overlay de carregamento enquanto o login é processado */}
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
     );
 }

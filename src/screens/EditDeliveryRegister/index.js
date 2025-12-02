@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // Componentes básicos do React Native
 
 import styles from './styles';
@@ -35,6 +36,7 @@ export default function EditDeliveryRegister() {
     const [hrEntrada, setHrEntrada] = useState('');
     const [placa, setPlaca] = useState('');
     const [nNota, setNNota] = useState('');
+    const [senha, setSenha] = useState('');
     const [visibleModalDelete, setVisibleModalDelete] = useState(false);
     // Estados para cada campo do formulário e modal de delete
 
@@ -100,19 +102,27 @@ export default function EditDeliveryRegister() {
     };
 
     async function deletar(idregister) {
-        // Função que envia requisição para deletar registro
+
         try {
             const res = await api.get(`/api/mobile/app/deletarRegistroEntrega/${idregister}`);
             console.log(res.data);
             return res.data;
+
         } catch (err) {
-            console.error('Erro ao deletar registro:', err.response?.data || err.message);
+            console.error('Erro ao excluir registro:', err.response?.data || err.message);
+            alert("Erro ao excluir o registro!");
             throw err;
         }
     }
 
     const handleDeletar = async () => {
         // Handler para o botão de confirmar delete
+
+        if (senha !== "admin") {
+            alert("Senha inválida!");
+            return;
+        }
+
         try {
             await deletar(entry.idregister);
             setVisibleModalDelete(false);
@@ -125,7 +135,12 @@ export default function EditDeliveryRegister() {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+        >
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                 <View style={styles.painel}>
                     <View style={styles.header}>
@@ -144,7 +159,7 @@ export default function EditDeliveryRegister() {
                             <AnimatedInput label="Horário da Entrada" iconName="clock-time-four-outline" value={hrEntrada} onChangeText={setHrEntrada} editable={false} />
                             <AnimatedInput label="Fornecedor" iconName="store" value={fornecedor} onChangeText={setFornecedor} />
                             <AnimatedInput label="Telefone" iconName="phone" value={telefone} onChangeText={setTelefone} />
-                            <AnimatedInput label="Nº da nota" iconName="file-document-outline" value={nNota} onChangeText={setNNota} />
+                            <AnimatedInput label="Nº da nota" iconName="file-document-outline" value={nNota} onChangeText={setNNota} keyboardType="numeric" />
                         </View>
 
                         <View style={styles.painelRight}>
@@ -170,24 +185,31 @@ export default function EditDeliveryRegister() {
                 // Modal de confirmação de delete
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
-                        <Text style={styles.modalText}>Deseja deletar este registro?</Text>
+                        <TouchableOpacity onPress={() => setVisibleModalDelete(false)}>
+                            <Ionicons name="close" size={34} color="red" style={{margin: 10}}/>
+                        </TouchableOpacity>
+                        <Text style={styles.modalText}>
+                            Insira a senha de um supervisor para confirmar a exclusão do registro:
+                        </Text>
+
+                        <AnimatedInput
+                            label="Senha"
+                            iconName="lock"
+                            value={senha}
+                            onChangeText={setSenha}
+                            secureTextEntry
+                        />
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                style={[styles.button, styles.cancelButton]}
-                                onPress={() => setVisibleModalDelete(false)}
-                            >
-                                <Text style={styles.buttonText}>Não</Text>
-                            </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.button, styles.confirmButton]}
                                 onPress={handleDeletar}
                             >
-                                <Text style={styles.buttonText}>Sim</Text>
+                                <Text style={styles.buttonText}>Confirmar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             )}
-        </View>
+        </KeyboardAwareScrollView>
     );
 }

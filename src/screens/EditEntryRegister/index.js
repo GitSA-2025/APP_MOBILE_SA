@@ -1,4 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 // Componentes básicos do React Native
 
 import styles from './styles';
@@ -36,6 +38,7 @@ export default function EditEntryRegister() {
     const [data, setData] = useState('');
     const [hrEntrada, setHrEntrada] = useState('');
     const [placa, setPlaca] = useState('');
+    const [senha, setSenha] = useState('');
     const [dados, setDados] = useState([]);
     const [visibleModalDelete, setVisibleModalDelete] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -65,7 +68,7 @@ export default function EditEntryRegister() {
                 } catch (err) {
                     console.error('Erro ao carregar entradas:', err.response?.data || err.message);
                 }
-                finally{
+                finally {
                     setLoading(false);
                 }
             };
@@ -90,7 +93,7 @@ export default function EditEntryRegister() {
             console.error('Erro ao editar:', err.response?.data || err.message);
             throw err;
         }
-        finally{
+        finally {
             setLoading(false);
         }
     }
@@ -113,18 +116,27 @@ export default function EditEntryRegister() {
     // Handler do botão "Salvar", com validação de campos obrigatórios
 
     async function deletar(idregister) {
+
         try {
             const res = await api.get(`/api/mobile/app/deletarRegistroEntrada/${idregister}`);
             console.log(res.data);
             return res.data;
+
         } catch (err) {
-            console.error('Erro ao registrar saída:', err.response?.data || err.message);
+            console.error('Erro ao excluir registro:', err.response?.data || err.message);
+            alert("Erro ao excluir o registro!");
             throw err;
         }
     }
     // Função que envia requisição para deletar o registro
 
     const handleDeletar = async () => {
+
+        if (senha !== "admin") {
+            alert("Senha inválida!");
+            return;
+        }
+
         try {
             await deletar(entry.idregister);
             setVisibleModalDelete(false);
@@ -138,7 +150,12 @@ export default function EditEntryRegister() {
     // Handler do botão "Deletar", com modal de confirmação
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+        >
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                 <View style={styles.painel}>
                     <View style={styles.header}>
@@ -152,11 +169,11 @@ export default function EditEntryRegister() {
                     <View style={styles.fullPainel}>
                         <View style={styles.painelLeft}>
                             {/* Lado esquerdo do formulário */}
-                            <AnimatedInput 
-                                label="Nome" 
-                                iconName="account" 
-                                value={nome} 
-                                onChangeText={setNome} 
+                            <AnimatedInput
+                                label="Nome"
+                                iconName="account"
+                                value={nome}
+                                onChangeText={setNome}
                             />
                             <AnimatedSelect
                                 label="Selecione o tipo de pessoa"
@@ -165,31 +182,31 @@ export default function EditEntryRegister() {
                                 value={tipoPessoa}
                                 onSelect={setTipoPessoa}
                             />
-                            <AnimatedInput 
-                                label="CPF" 
-                                iconName="badge-account-horizontal" 
-                                value={cpf} 
-                                onChangeText={setCpf} 
+                            <AnimatedInput
+                                label="CPF"
+                                iconName="badge-account-horizontal"
+                                value={cpf}
+                                onChangeText={setCpf}
                             />
-                            <AnimatedInput 
-                                label="Data" 
-                                iconName="calendar" 
-                                value={data} 
-                                onChangeText={setData} 
-                                editable={false} 
+                            <AnimatedInput
+                                label="Data"
+                                iconName="calendar"
+                                value={data}
+                                onChangeText={setData}
+                                editable={false}
                             />
-                            <AnimatedInput 
-                                label="Horário da Entrada" 
-                                iconName="clock-time-four-outline" 
-                                value={hrEntrada} 
-                                onChangeText={setHrEntrada} 
-                                editable={false} 
+                            <AnimatedInput
+                                label="Horário da Entrada"
+                                iconName="clock-time-four-outline"
+                                value={hrEntrada}
+                                onChangeText={setHrEntrada}
+                                editable={false}
                             />
-                            <AnimatedInput 
-                                label="Placa do Veículo" 
-                                iconName="car" 
-                                value={placa} 
-                                onChangeText={setPlaca} 
+                            <AnimatedInput
+                                label="Placa do Veículo"
+                                iconName="car"
+                                value={placa}
+                                onChangeText={setPlaca}
                             />
                         </View>
 
@@ -215,26 +232,31 @@ export default function EditEntryRegister() {
                 // Modal de confirmação de delete
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
+                        <TouchableOpacity onPress={() => setVisibleModalDelete(false)}>
+                            <Ionicons name="close" size={34} color="red" style={{margin: 10}}/>
+                        </TouchableOpacity>
                         <Text style={styles.modalText}>
-                            Deseja deletar este registro?
+                            Insira a senha de um supervisor para confirmar a exclusão do registro:
                         </Text>
+
+                        <AnimatedInput
+                            label="Senha"
+                            iconName="lock"
+                            value={senha}
+                            onChangeText={setSenha}
+                            secureTextEntry
+                        />
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                style={[styles.button, styles.cancelButton]}
-                                onPress={() => setVisibleModalDelete(false)}
-                            >
-                                <Text style={styles.buttonText}>Não</Text>
-                            </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.button, styles.confirmButton]}
                                 onPress={handleDeletar}
                             >
-                                <Text style={styles.buttonText}>Sim</Text>
+                                <Text style={styles.buttonText}>Confirmar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             )}
-        </View>
+        </KeyboardAwareScrollView>
     );
 }

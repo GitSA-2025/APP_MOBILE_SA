@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // Importa componentes básicos do React Native para interface e alertas
 
 import styles from './styles';
@@ -92,13 +93,18 @@ export default function EntryRegister() {
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar o registro. Tente novamente.');
         }
-        finally{
+        finally {
             setLoading(false);
         }
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+        >
             {/* Container principal */}
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
@@ -181,6 +187,6 @@ export default function EntryRegister() {
 
             <LoadingOverlay visible={loading} text="Enviando..." />
             {/* Overlay exibido enquanto a requisição está em andamento */}
-        </View>
+        </KeyboardAwareScrollView>
     );
 }

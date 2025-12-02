@@ -141,7 +141,7 @@ export default function DeliveryRegisterScreen() {
                         {entregas.map((item, index) => (
                             // Mapeia cada entrega
                             <View key={index} style={styles.tableRow}>
-                                <Text style={[styles.tableCell, styles.cellDate]}>{item.date}</Text>
+                                <Text style={[styles.tableCell, styles.cellDate]}>{item.date_fixed}</Text>
                                 <Text style={[styles.tableCell, styles.cellName]}>{item.name}</Text>
                                 <View style={[styles.statusBadge, styles.statusLiberado]}>
                                     <Feather name="check" size={14} color="white" />

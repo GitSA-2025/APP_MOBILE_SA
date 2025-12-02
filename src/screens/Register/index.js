@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, ScrollView } from 'react-native';
 import styles from './styles';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../api/api';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import AnimatedInput from '../../components/AnimatedInput';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function Register() {
     const navigation = useNavigation();
@@ -68,9 +69,11 @@ export default function Register() {
     };
 
     return (
-        <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Ajusta para evitar teclado sobrepondo campos
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
         >
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}
@@ -79,7 +82,7 @@ export default function Register() {
                 <View style={styles.container}>
                     {/* Painel esquerdo com logo e informações */}
                     <View style={styles.leftPainel}>
-                        <Image source={require('../../../assets/kozzy_logo_1.png')} style={{width: '50%', height: 80}}/>
+                        <Image source={require('../../../assets/kozzy_logo_1.png')} style={{ width: '50%', height: 80 }} />
                         <Text style={styles.title}>Olá, seja bem-vindo(a) novo usuário!</Text>
                         <Text style={styles.subTitle}>
                             Crie a sua conta nova no SA para continuar e utilizar as funcionalidades do APP!
@@ -90,7 +93,7 @@ export default function Register() {
                         {/* Painel direito com formulário */}
                         <View style={styles.rightPainel}>
                             <Text style={styles.titleLogin}>Crie a sua conta</Text>
-                            
+
                             {/* Campos do formulário com animação */}
                             <AnimatedInput
                                 label="Nome"
@@ -146,6 +149,6 @@ export default function Register() {
 
             {/* Overlay de carregamento */}
             <LoadingOverlay visible={loading} text="Carregando..." />
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
     );
 }

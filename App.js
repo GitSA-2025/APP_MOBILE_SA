@@ -20,6 +20,7 @@ import EditDeliveryRegister from './src/screens/EditDeliveryRegister';
 import Reports from './src/screens/Reports';
 import ConfigScreen from './src/screens/ConfigScreen';
 import QRCodeScan from './src/screens/QRCodeScan';
+import EditAccount from './src/screens/EditAccount';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -64,6 +65,7 @@ function App() {
         <Stack.Screen name="QrCodeApproval" component={QrCodeApproval} options={{ headerShown: false}}/>
         <Stack.Screen name="ConfigScreen" component={ConfigScreen} options={{ headerShown: false}}/>
         <Stack.Screen name="QRCodeScan" component={QRCodeScan} options={{ headerShown: false}}/>
+        <Stack.Screen name="EditAccount" component={EditAccount} options={{ headerShown: false}}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

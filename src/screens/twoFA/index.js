@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import styles from './styles';
 import AnimatedInput from '../../components/AnimatedInput'; // Input customizado com animação
 import { useState } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native'; // Para pegar params e navegação
 import api from '../../api/api'; // Instância da API
 import LoadingOverlay from '../../components/LoadingOverlay'; // Tela de loading
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 
 export default function TwoFA() {
 
@@ -72,9 +74,12 @@ export default function TwoFA() {
   // Render do componente
   // --------------------------
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> 
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      enableOnAndroid
+      extraScrollHeight={20}
+      keyboardShouldPersistTaps="handled"
+    >
       {/* Ajusta layout quando teclado é aberto */}
 
       <ScrollView
@@ -83,7 +88,7 @@ export default function TwoFA() {
         {/* Scroll para evitar sobreposição do teclado */}
 
         <View style={styles.container}>
-          
+
           {/* Painel esquerdo explicativo */}
           <View style={styles.leftPainel}>
             <Text style={styles.title}>Continue o seu cadastro!</Text>
@@ -117,6 +122,6 @@ export default function TwoFA() {
 
       {/* Overlay de loading durante requisição */}
       <LoadingOverlay visible={loading} text="Carregando..." />
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 }

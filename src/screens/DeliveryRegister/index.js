@@ -1,26 +1,27 @@
-import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-native'; 
+import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // Importa componentes básicos do React Native
 
-import styles from './styles'; 
+import styles from './styles';
 // Importa estilos específicos deste componente
 
-import Ionicons from '@expo/vector-icons/Ionicons'; 
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'; 
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 // Importa ícones do Expo
 
-import AnimatedInput from '../../components/AnimatedInput'; 
+import AnimatedInput from '../../components/AnimatedInput';
 // Importa componente customizado de input animado
 
-import LoadingOverlay from '../../components/LoadingOverlay'; 
+import LoadingOverlay from '../../components/LoadingOverlay';
 // Importa overlay de carregamento
 
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 // Importa hooks do React
 
-import { useNavigation, useRoute } from '@react-navigation/native'; 
+import { useNavigation, useRoute } from '@react-navigation/native';
 // Importa hooks de navegação do React Navigation
 
-import api from '../../api/api'; 
+import api from '../../api/api';
 // Importa instância axios configurada para chamadas API
 
 export default function DeliveryRegister() {
@@ -97,13 +98,18 @@ export default function DeliveryRegister() {
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível realizar o registro. Tente novamente.');
         }
-        finally{
+        finally {
             setLoading(false); // Desativa overlay
         }
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+        >
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
@@ -179,8 +185,8 @@ export default function DeliveryRegister() {
                     </View>
                 </View>
             </ScrollView>
-            <LoadingOverlay visible={loading} text="Carregando..." /> 
+            <LoadingOverlay visible={loading} text="Carregando..." />
             {/* Overlay mostrado enquanto o loading está ativo */}
-        </View>
+        </KeyboardAwareScrollView>
     );
 }

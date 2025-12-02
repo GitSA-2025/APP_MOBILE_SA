@@ -56,6 +56,10 @@ const Sidebar = ({ isOpen, onClose }) => {
         navigation.navigate('ConfigScreen', { user_email });
     };
 
+    const handleEditAccount = () => {
+        navigation.navigate('EditAccount', { user_email });
+    };
+
     const handleLogout = () => {
         AsyncStorage.removeItem('userToken');
         navigation.reset({
@@ -102,7 +106,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </View>
 
                 <View>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} onPress={handleEditAccount}>
                         <FontAwesome5 name="user-edit" size={22} color="white" />
                         <Text style={styles.menuItemText}>Editar conta</Text>
                     </TouchableOpacity>
