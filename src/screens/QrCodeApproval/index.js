@@ -68,7 +68,7 @@ export default function QrCodeApproval() {
                 setReqs(res.data); // Atualiza o estado com os dados recebidos
             }
         } catch (err) {
-            console.error('Erro ao carregar solicitações:', err.response?.data || err.message);
+            console.log('Erro ao carregar solicitações:', err.response?.data || err.message);
             if (isActive) {
                 const errorMessage = err.response?.data?.message || 'Erro ao carregar solicitações.';
                 if (err.response?.status === 404 && errorMessage.includes('Nenhuma solicitação')) {
